@@ -15,3 +15,26 @@ buildNumber.properties
 .project
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
+
+# Allure (local installation + generated results/reports)
+.allure/
+allure-results/
+allure-report/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+*.exe
+
+# Logs and JVM crash dumps
+logs/
+*.log
+hs_err_pid*.log
+
+# Screenshots (generated at runtime)
+screenshots/
