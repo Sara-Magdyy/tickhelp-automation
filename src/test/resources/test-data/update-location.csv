@@ -1,0 +1,3 @@
+sep=,
+Name,Quantity,SerialNumber,Location,Comments,Manufacturer,Supplier,Type,Assigned To,Company,MMM
+AutoImportAsset_TC004,,,UpdatedLocation,,,,Laptop,,,
