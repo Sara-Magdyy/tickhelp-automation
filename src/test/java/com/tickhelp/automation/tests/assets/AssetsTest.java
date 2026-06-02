@@ -25,6 +25,12 @@ public class AssetsTest extends BaseTest {
 
     @BeforeClass(alwaysRun = true)
     public void loginAndNavigateToAssets() {
+        if (!isDriverAlive()) {
+            log.warn("Driver dead at @BeforeClass entry — reinitialising");
+            DriverManager.quitDriver();
+            DriverManager.initDriver();
+            DriverManager.getDriver().get(ConfigManager.getBaseUrl() + "/User/Login");
+        }
         LoginPage loginPage = new LoginPage(DriverManager.getDriver());
         loginPage.login(ConfigManager.getAdminEmail(), ConfigManager.getAdminPassword());
 
@@ -122,11 +128,14 @@ public class AssetsTest extends BaseTest {
         if (!assetsListPage.isAssetRowsPresent()) {
             throw new SkipException("No assets to bulk-delete");
         }
-        assetsListPage.selectAllAssets();
-        assetsListPage.clickBulkDelete();
+        // Loop until all pages are cleared — selectAllAssets only acts on the current page,
+        // so assets accumulated on page 2+ require repeated passes.
+        while (assetsListPage.isAssetRowsPresent()) {
+            assetsListPage.selectAllAssets();
+            assetsListPage.clickBulkDelete();
+            assetsListPage.navigateToAssets();
+        }
 
-        // After bulk delete the table may not be rendered (0 assets) — check URL instead
-        assetsListPage.navigateToAssets();
         assertThat(DriverManager.getDriver().getCurrentUrl())
                 .as("Assets page should be accessible and functional after bulk delete")
                 .contains("/Assets");

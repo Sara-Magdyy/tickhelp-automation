@@ -132,6 +132,7 @@ public class AssetsListPage extends BasePage {
         By byNextPage = By.xpath(
                 "//ul[contains(@class,'pagination')]//li[not(contains(@class,'disabled'))]" +
                 "/a[normalize-space(.)='»' or normalize-space(.)='>' or normalize-space(.)='›'" +
+                " or translate(normalize-space(.),'NEXT','next')='next'" +
                 " or contains(translate(@aria-label,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'next')]");
         int pageLimit = 20;
         while (isPresent(byNextPage) && pageLimit-- > 0) {
@@ -355,6 +356,20 @@ public class AssetsListPage extends BasePage {
         By assetLink = By.xpath(
                 "//table[@id='tblTickets']//td[contains(.,'" + name + "')]//a | " +
                 "//table[@id='tblTickets']//a[contains(.,'" + name + "')]");
+        By byNextPage = By.xpath(
+                "//ul[contains(@class,'pagination')]//li[not(contains(@class,'disabled'))]" +
+                "/a[normalize-space(.)='»' or normalize-space(.)='>' or normalize-space(.)='›'" +
+                " or translate(normalize-space(.),'NEXT','next')='next'" +
+                " or contains(translate(@aria-label,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'next')]");
+        int pageLimit = 20;
+        while (!isPresent(assetLink) && isPresent(byNextPage) && pageLimit-- > 0) {
+            try {
+                click(byNextPage);
+                waitForAssetsPageLoaded();
+            } catch (Exception e) {
+                break;
+            }
+        }
         click(assetLink);
         return new AssetDetailPage(driver);
     }

@@ -29,6 +29,12 @@ public class AssetsRetiredToggleTest extends BaseTest {
 
     @BeforeClass(alwaysRun = true)
     public void loginAndSetup() {
+        if (!isDriverAlive()) {
+            log.warn("Driver dead at @BeforeClass entry — reinitialising");
+            DriverManager.quitDriver();
+            DriverManager.initDriver();
+            DriverManager.getDriver().get(ConfigManager.getBaseUrl() + "/User/Login");
+        }
         LoginPage loginPage = new LoginPage(DriverManager.getDriver());
         loginPage.login(ConfigManager.getAdminEmail(), ConfigManager.getAdminPassword());
         assetsListPage = new AssetsListPage(DriverManager.getDriver());

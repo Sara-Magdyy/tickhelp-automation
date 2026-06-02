@@ -21,8 +21,15 @@ public class DriverManager {
         if (ConfigManager.isHeadless()) {
             options.addArguments("--headless=new");
         }
-        options.addArguments("--no-sandbox", "--disable-dev-shm-usage",
-                "--disable-gpu", "--window-size=1920,1080");
+        options.addArguments(
+                "--no-sandbox",
+                "--disable-dev-shm-usage",
+                "--disable-gpu",
+                "--window-size=1920,1080",
+                "--remote-debugging-port=0",
+                "--disable-extensions",
+                "--no-first-run"
+        );
         if (extraChromePrefs != null) {
             options.setExperimentalOption("prefs", extraChromePrefs);
         }
@@ -42,6 +49,17 @@ public class DriverManager {
         if (driver != null) {
             try { driver.quit(); } catch (Exception ignored) {}
             driverThreadLocal.remove();
+        }
+    }
+
+    public static boolean isAlive() {
+        try {
+            WebDriver d = driverThreadLocal.get();
+            if (d == null) return false;
+            d.getCurrentUrl();
+            return true;
+        } catch (Exception e) {
+            return false;
         }
     }
 }

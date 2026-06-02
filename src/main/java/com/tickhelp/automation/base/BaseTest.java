@@ -22,8 +22,18 @@ public abstract class BaseTest {
 
     @BeforeClass(alwaysRun = true)
     public void setUp() {
-        DriverManager.initDriver();
+        try {
+            DriverManager.initDriver();
+        } catch (Exception e) {
+            log.warn("Chrome start failed ({}), retrying once", e.getMessage());
+            DriverManager.quitDriver();
+            DriverManager.initDriver();
+        }
         DriverManager.getDriver().get(ConfigManager.getBaseUrl() + "/User/Login");
+    }
+
+    protected boolean isDriverAlive() {
+        return DriverManager.isAlive();
     }
 
     @AfterClass(alwaysRun = true)
