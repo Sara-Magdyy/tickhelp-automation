@@ -18,15 +18,15 @@
         </classes>
     </test>
 
-    <test name="AssetsListSearchTests">
-        <classes>
-            <class name="com.tickhelp.automation.tests.assets.AssetsListSearchTest"/>
-        </classes>
-    </test>
-
     <test name="AssetsImportCsvTests">
         <classes>
             <class name="com.tickhelp.automation.tests.assets.AssetsImportCsvTest"/>
+        </classes>
+    </test>
+
+    <test name="AssetsListSearchTests">
+        <classes>
+            <class name="com.tickhelp.automation.tests.assets.AssetsListSearchTest"/>
         </classes>
     </test>
 
